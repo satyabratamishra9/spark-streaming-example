@@ -1,24 +1,24 @@
-name := "kafka-spark-streaming"
+name := "spark-streaming-kafka"
 
 version := "0.1"
 
 scalaVersion := "2.11.8"
 
+libraryDependencies ++= Seq(
+  //"org.apache.spark" %% "spark-streaming" % "2.4.0" % "provided",
+  //"org.apache.spark" %% "spark-streaming-kafka-0-10" % "2.4.4",
+  //"org.apache.spark" % "spark-streaming_2.12" % "2.4.4" % "provided",
+  //"org.apache.spark" % "spark-streaming-kafka-0-10_2.12" % "2.4.4",
+  "org.mongodb.scala" %% "mongo-scala-driver" % "2.7.0"
+  //"org.apache.spark" %%  "spark-streaming-kafka-0-8_2.11" % "2.1.1",
+  //"org.scalikejdbc" %% "scalikejdbc" % "3.0.1",
+  //"mysql" % "mysql-connector-java" % "5.1.43"
+)
 libraryDependencies += "org.apache.spark" %% "spark-streaming" % "2.3.1" % "provided"
-
-//libraryDependencies += "org.apache.spark" %% "spark-streaming-kafka-0-10" % "2.0.0"
-
-
 libraryDependencies += "org.apache.spark" %% "spark-streaming-kafka-0-10" % "2.3.1"
-//libraryDependencies += "org.apache.kafka" % "kafka-clients" % "0.10.0.1"
+libraryDependencies += "org.reactivemongo" %% "reactivemongo" % "0.18.0"
 
 assemblyMergeStrategy in assembly := {
-  case PathList("javax", "servlet", xs @ _*)         => MergeStrategy.first
-  case PathList(ps @ _*) if ps.last endsWith ".html" => MergeStrategy.first
-  case PathList(ps @ _*) if ps.last endsWith ".class" => MergeStrategy.first
-  case "application.conf"                            => MergeStrategy.concat
-  case "unwanted.txt"                                => MergeStrategy.discard
-  case x =>
-    val oldStrategy = (assemblyMergeStrategy in assembly).value
-    oldStrategy(x)
+  case PathList("META-INF", xs @ _*) => MergeStrategy.discard
+  case x => MergeStrategy.first
 }
