@@ -14,6 +14,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.spark
 import reactivemongo.api.commands.WriteResult
 
+import reactivemongo.core.nodeset.{ Authenticate, ProtocolMetadata }
+
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 //import scalikejdbc._
