@@ -30,9 +30,9 @@ import org.mongodb.scala._
 
 object ExactlyOnce {
   def main(args: Array[String]): Unit = {
-    val brokers = "172.31.1.49:9092"
+    val brokers = "54.175.187.84:9092"
     //val brokers = "localhost:9092" 18.222.179.73
-    val topic = "spark-topic"
+    val topic = "test1"
 
     val kafkaParams = Map[String, Object](
       "bootstrap.servers" -> brokers,
@@ -65,7 +65,7 @@ object ExactlyOnce {
     // setting up mongo connection, database and collection
     val driver: MongoDriver = new MongoDriver()
     val connection: MongoConnection = driver.connection(ParsedURI(hosts =
-      List(("172.31.1.49", 27017)),
+      List(("3.82.12.58", 27017)),
       options = MongoConnectionOptions(nbChannelsPerNode = 200, connectTimeoutMS = 5000),
       ignoredOptions = List.empty[String], db = None, authenticate = None))
     //Failover Strategy for Mongo Connections
