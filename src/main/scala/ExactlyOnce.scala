@@ -42,7 +42,7 @@ object ExactlyOnce {
       "value.deserializer" -> classOf[StringDeserializer],
       "group.id" -> "at-least-once",
       //"enable.auto.commit" -> (false: java.lang.Boolean),
-      "auto.offset.reset" -> "latest")
+      "auto.offset.reset" -> "earliest")
 
     val conf = new SparkConf().setAppName("spark-streaming-semantics").setIfMissing("spark.master", "local[2]")
     val ssc = new StreamingContext(conf, Seconds(5))
