@@ -21,6 +21,10 @@ jobs:
           name: create package
           command: sbt assembly
           
+      - add_ssh_keys:
+          fingerprints: 
+             - "fd:87:3c:30:08:3f:4f:22:56:51:6a:9d:89:d3:ac:61"
+          
       - run:
           name: spark submit
           command: |
