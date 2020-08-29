@@ -45,7 +45,7 @@ object ExactlyOnce {
       "auto.offset.reset" -> "earliest")
 
     val conf = new SparkConf().setAppName("spark-streaming-semantics").setIfMissing("spark.master", "local[2]")
-    val ssc = new StreamingContext(conf, Seconds(5))
+    val ssc = new StreamingContext(conf, Seconds(60))
 
     val messages = KafkaUtils.createDirectStream[String, String](ssc,
       LocationStrategies.PreferConsistent,
@@ -79,6 +79,7 @@ object ExactlyOnce {
       )
     val db = Await.result(connection.database(dataBase, strategy), 20 seconds)
     val bsonCollection = db.collection[BSONCollection](collection)
+    print(db, bsonCollection)
     bsonCollection
   }
 }
