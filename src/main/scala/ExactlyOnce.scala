@@ -69,7 +69,7 @@ object ExactlyOnce {
     val connection: MongoConnection = driver.connection(ParsedURI(hosts =
       List(("3.82.12.58", 27017)),
       options = MongoConnectionOptions(nbChannelsPerNode = 200, connectTimeoutMS = 5000),
-      ignoredOptions = List.empty[String], db = None, authenticate = Authenticate("admin", "siteRootAdmin", Some("passw0rd"))))
+      ignoredOptions = List.empty[String], db = None, authenticate = Some(Authenticate("admin", "siteRootAdmin", Some("passw0rd"))))
     //Failover Strategy for Mongo Connections
     val strategy: FailoverStrategy =
       FailoverStrategy(
