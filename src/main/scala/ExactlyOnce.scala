@@ -49,7 +49,7 @@ object ExactlyOnce {
 
     val messages = KafkaUtils.createDirectStream[String, String](ssc,
       LocationStrategies.PreferConsistent,
-      ConsumerStrategies.Subscribe[String, String](Seq("spark-topic"), kafkaParams))
+      ConsumerStrategies.Subscribe[String, String](Seq("test1"), kafkaParams))
     messages.map(record=> {
       val data = record.value().toString
       val document1 = BSONDocument("value" -> data.toString)
