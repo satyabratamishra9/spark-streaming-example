@@ -1,0 +1,29 @@
+version: 2.1
+general:
+
+jobs:
+
+  build:
+
+    working_directory: ~/repo
+
+    docker:
+    - image: circleci/openjdk:8-jdk
+
+    environment:
+      # Customize the JVM maximum heap size
+      JVM_OPTS: -Xmx3200m
+
+    steps:
+      - checkout
+      
+      - run:
+          name: create package
+          command: sbt assembly
+          
+      - run:
+          name: spark submit
+          command: |
+             ssh -o StrictHostKeyChecking=no ec2-user@54.166.200.69 'spark-submit --conf spark.app.name=TestApp --conf spark.streaming.stopGracefullyOnShutdown=true --master spark://35.170.33.238:7077,54.166.200.69:7077 --deploy-mode cluster --jars target/scala-2.11/spark-streaming-kafka-assembly-0.1.jar at-least-once && sleep 20'
+
+      #      # ssh -o StrictHostKeyChecking=no ec2-user@35.170.33.238 'spark-submit --conf spark.app.name=TestApp --conf spark.streaming.stopGracefullyOnShutdown=true --master spark://35.170.33.238:7077,54.166.200.69:7077 --deploy-mode cluster --jars target/scala-2.11/spark-streaming-kafka-assembly-0.1.jar at-least-once && sleep 20'          
