@@ -14,8 +14,6 @@ import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.spark
 import reactivemongo.api.commands.WriteResult
 
-import reactivemongo.core.nodeset.{ Authenticate, ProtocolMetadata }
-
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 //import scalikejdbc._
@@ -42,10 +40,10 @@ object ExactlyOnce {
       "value.deserializer" -> classOf[StringDeserializer],
       "group.id" -> "at-least-once",
       //"enable.auto.commit" -> (false: java.lang.Boolean),
-      "auto.offset.reset" -> "earliest")
+      "auto.offset.reset" -> "latest")
 
     val conf = new SparkConf().setAppName("spark-streaming-semantics").setIfMissing("spark.master", "local[2]")
-    val ssc = new StreamingContext(conf, Seconds(60))
+    val ssc = new StreamingContext(conf, Seconds(5))
 
     val messages = KafkaUtils.createDirectStream[String, String](ssc,
       LocationStrategies.PreferConsistent,
@@ -65,11 +63,26 @@ object ExactlyOnce {
   }
   def getMongoCollection(dataBase : String, collection : String) : BSONCollection = {
     // setting up mongo connection, database and collection
+
+
+
     val driver: MongoDriver = new MongoDriver()
-    val connection: MongoConnection = driver.connection(ParsedURI(hosts =
-      List(("54.81.4.104", 27017)),
-      options = MongoConnectionOptions(nbChannelsPerNode = 200, connectTimeoutMS = 5000),
-      ignoredOptions = List.empty[String], db = None, authenticate = Some(Authenticate("spark-test", "siteRootAdmin", Some("passw0rd")))))
+    // val connection: MongoConnection = driver.connection(ParsedURI(hosts =
+    //   List(("3.82.12.58":27017)),
+    //   options = MongoConnectionOptions(nbChannelsPerNode = 200, connectTimeoutMS = 5000),
+    //   ignoredOptions = List.empty[String], db = None, authenticate = None))
+
+
+    val servers6 = List("54.81.4.104:27017")
+    val dbName = "admin"
+	val userName = "siteRootAdmin"
+	val password = "passw0rd"
+	val credentials = List(Authenticate(dbName, userName, password))
+
+	val connection: MongoConnection = driver.connection(servers6,
+		options = MongoConnectionOptions(nbChannelsPerNode = 200, connectTimeoutMS = 5000,authMode = "scram-sha1",tcpNoDelay=true),
+		authentications = credentials)
+
     //Failover Strategy for Mongo Connections
     val strategy: FailoverStrategy =
       FailoverStrategy(
@@ -79,7 +92,6 @@ object ExactlyOnce {
       )
     val db = Await.result(connection.database(dataBase, strategy), 20 seconds)
     val bsonCollection = db.collection[BSONCollection](collection)
-    print(db, bsonCollection)
     bsonCollection
   }
 }
