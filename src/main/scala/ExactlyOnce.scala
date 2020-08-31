@@ -32,7 +32,7 @@ import org.mongodb.scala._
 
 object ExactlyOnce {
   def main(args: Array[String]): Unit = {
-    val brokers = "54.175.187.84:9092"
+    val brokers = "52.207.197.37:9092"
     //val brokers = "localhost:9092" 18.222.179.73
     val topic = "test1"
 
@@ -78,7 +78,7 @@ object ExactlyOnce {
     //   ignoredOptions = List.empty[String], db = None, authenticate = None))
 
 
-  val servers6 = List("3.82.12.58:27017")
+  val servers6 = List("54.225.26.154:27017")
   val dbName = "admin"
 	val userName = "siteRootAdmin"
 	val password = "passw0rd"
