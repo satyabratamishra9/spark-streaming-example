@@ -26,10 +26,14 @@ jobs:
              - "3d:45:36:3a:59:ec:92:e1:2a:03:f8:2e:7d:61:24:5d"
           
       - run:
-          name: spark submit
+          name: copy jar file
           command: |     
-            scp -o StrictHostKeyChecking=no -r target/ ec2-user@3.81.161.5:~/
-     #       ssh -o StrictHostKeyChecking=no ec2-user@100.24.10.2559 'spark-submit --master spark://100.24.10.255:7077,3.236.203.233:7077 target/scala-2.11/spark-streaming-kafka-assembly-0.1.jar at-least-once'
+            scp -o StrictHostKeyChecking=no -r target/scala-2.11/spark-streaming-kafka-assembly-0.1.jar ec2-user@3.81.161.5:~/develop
+            
+      - run:
+          name: spark submit
+          command: |
+            ssh -o StrictHostKeyChecking=no ec2-user@3.81.161.5 'spark-submit --master spark://3.81.161.5:7077,3.92.152.95:7077 develop/spark-streaming-kafka-assembly-0.1.jar at-least-once'
 
       #      # ssh -o StrictHostKeyChecking=no ec2-user@35.170.33.238 'spark-submit --conf spark.app.name=TestApp --conf spark.streaming.stopGracefullyOnShutdown=true --master spark://35.170.33.238:7077,54.166.200.69:7077 --deploy-mode cluster --jars target/scala-2.11/spark-streaming-kafka-assembly-0.1.jar at-least-once && sleep 20'          
              
